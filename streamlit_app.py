@@ -58,6 +58,7 @@ st.caption(
 
 with st.sidebar:
     st.success("SHL catalog only")
+    view = st.radio("View", ("Recommender", "API documentation"))
     st.markdown(
         """
         Try:
@@ -72,6 +73,38 @@ with st.sidebar:
     if st.button("New conversation", use_container_width=True):
         st.session_state.messages = []
         st.rerun()
+
+if view == "API documentation":
+    st.title("API documentation")
+    st.info(
+        "This Streamlit deployment demonstrates the recommender UI. The same "
+        "repository also contains the FastAPI service in `app/main.py`, with "
+        "interactive Swagger documentation at `/docs` when that service is deployed."
+    )
+    st.markdown("### `GET /health`")
+    st.code('{"status": "ok"}', language="json")
+    st.markdown("### `POST /chat`")
+    st.markdown("Send the complete conversation on every request; the API is stateless.")
+    st.code(
+        '''{
+  "messages": [
+    {"role": "user", "content": "Frontend engineer with 4 years experience"}
+  ]
+}''',
+        language="json",
+    )
+    st.markdown("### Response")
+    st.code(
+        '''{
+  "reply": "Here are the strongest SHL assessment matches...",
+  "recommendations": [
+    {"name": "JavaScript (New)", "url": "https://www.shl.com/...", "test_type": "technical"}
+  ],
+  "end_of_conversation": false
+}''',
+        language="json",
+    )
+    st.stop()
 
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):

@@ -118,6 +118,28 @@ class AgentBehaviorTests(unittest.IsolatedAsyncioTestCase):
 
         self.assertIn("frontend developer", response.reply.lower())
 
+    async def test_frontend_typo_does_not_return_unrelated_engineering(self) -> None:
+        catalog = [
+            assessment("Industrial Engineering (New)", cognitive=True),
+            assessment("Automata Front End", technical=True),
+            assessment("JavaScript (New)", technical=True),
+            assessment("ReactJS (New)", technical=True),
+            assessment("HTML/CSS (New)", technical=True),
+        ]
+        agent = ConversationalSHLAgent(
+            retriever=FakeRetriever(catalog),
+            ranker=HybridAssessmentRanker(),
+            comparator=CatalogComparator(),
+        )
+
+        response = await agent.chat([user("fronend engineer with 4 years experience")])
+
+        self.assertIn("frontend engineer", response.reply.lower())
+        self.assertGreaterEqual(len(response.recommendations), 3)
+        self.assertTrue(
+            all("industrial engineering" not in item.name.lower() for item in response.recommendations)
+        )
+
 
 def user(content: str) -> ChatMessage:
     return ChatMessage(role=MessageRole.USER, content=content)

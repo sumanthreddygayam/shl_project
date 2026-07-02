@@ -48,6 +48,15 @@ class ApiContractTests(unittest.TestCase):
 
         self.assertEqual(response.status_code, 204)
 
+    def test_openapi_documentation_is_available(self) -> None:
+        docs = self.client.get("/docs")
+        schema = self.client.get("/openapi.json")
+
+        self.assertEqual(docs.status_code, 200)
+        self.assertIn("Swagger UI", docs.text)
+        self.assertEqual(schema.status_code, 200)
+        self.assertIn("/chat", schema.json()["paths"])
+
     def test_recommendation_urls_are_from_scraped_catalog(self) -> None:
         catalog_path = Path(__file__).resolve().parents[1] / "scraper" / "catalog.json"
         catalog_urls = {

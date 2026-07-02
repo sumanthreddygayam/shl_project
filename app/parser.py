@@ -20,6 +20,8 @@ _SKILL_ALIASES: dict[str, tuple[str, ...]] = {
         "frontend",
         "front end",
         "front-end",
+        "fronend",
+        "fronted",
     ),
     "python": ("python", "django", "flask", "fastapi"),
     "sql": ("sql", "database", "mysql", "postgres", "oracle"),
@@ -63,7 +65,10 @@ class RuleBasedConversationParser:
         ]
         text = "\n".join(user_texts).lower()
         latest = user_texts[-1].lower() if user_texts else ""
-        latest_is_refinement = _is_refinement(latest)
+        # Refinement language only has meaning after an earlier user turn. A first
+        # request such as "frontend engineer with 4 years experience" is a complete
+        # role description, not a refinement.
+        latest_is_refinement = len(user_texts) > 1 and _is_refinement(latest)
         latest_role = _extract_role(latest, allow_standalone=True)
 
         requirements = Requirements()
@@ -217,7 +222,7 @@ def _clean_role(role: str) -> str:
         role,
         flags=re.IGNORECASE,
     )
-    role = role.replace("front end", "frontend").replace("front-end", "frontend")
+    role = re.sub(r"\b(?:front[ -]?end|fronend|fronted)\b", "frontend", role)
     return " ".join(role.strip(" .,-").split())
 
 
