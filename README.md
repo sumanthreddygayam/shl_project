@@ -131,46 +131,6 @@ The report includes Recall@10, clarification accuracy, recommendation accuracy,
 refinement accuracy, comparison accuracy, hallucination rate, and schema
 compliance.
 
-## Streamlit deployment through GitHub
-
-This repository includes a Streamlit UI entrypoint:
-
-```text
-streamlit_app.py
-```
-
-Run locally:
-
-```bash
-streamlit run streamlit_app.py
-```
-
-Deploy on Streamlit Community Cloud:
-
-1. Create a GitHub repository.
-2. Push this project to GitHub.
-3. Go to Streamlit Community Cloud and create a new app from that repository.
-4. Set the main file path to:
-
-```text
-streamlit_app.py
-```
-
-5. Deploy.
-
-No API keys are required for the deterministic catalog-grounded path. Do not
-commit real secrets. If you add secrets later, put them in Streamlit app secrets
-or a local `.env`, not in Git.
-
-The Streamlit UI is a friendly deployment surface. The required FastAPI service
-still exists in `app/main.py` with:
-
-- `GET /health`
-- `POST /chat`
-
-For API evaluation, run FastAPI with Uvicorn. For a recruiter demo, deploy
-`streamlit_app.py`.
-
 ## GitHub hygiene
 
 The `.gitignore` hides local-only and sensitive files, including:
@@ -179,7 +139,6 @@ The `.gitignore` hides local-only and sensitive files, including:
 - `sample_conversations/`
 - `.env`
 - `.env.*`
-- `.streamlit/secrets.toml`
 - `*.log`
 - `.agents/`
 - `.codex/`
@@ -199,7 +158,7 @@ Then push:
 
 ```bash
 git add .
-git commit -m "Add Streamlit deployment UI"
+git commit -m "Update FastAPI service"
 git push origin main
 ```
 
