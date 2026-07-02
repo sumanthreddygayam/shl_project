@@ -69,6 +69,12 @@ builder writes `vectorstore/index.faiss` and `vectorstore/manifest.json`.
 uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
+Interactive OpenAPI documentation is available at:
+
+```text
+http://localhost:8000/docs
+```
+
 On Windows/PowerShell you can also run:
 
 ```powershell
@@ -80,6 +86,10 @@ Endpoints:
 - `GET /` recruiter chat UI
 - `GET /health`
 - `POST /chat`
+
+`POST /chat` is stateless: callers send the complete conversation history in
+`messages[]` on every request. The response contains the next `reply`, zero to
+ten structured `recommendations`, and `end_of_conversation`.
 
 Example:
 
@@ -204,6 +214,22 @@ python -m unittest discover -s tests -v
 ```bash
 docker build -t shl-recommender .
 docker run --rm -p 8000:8000 --env-file .env shl-recommender
+```
+
+## Deploy the FastAPI service
+
+The repository includes `render.yaml` for a Docker-based Render web service.
+It binds Uvicorn to the host-provided `PORT` and uses `GET /health` as the
+readiness check.
+
+[Deploy the FastAPI service on Render](https://render.com/deploy?repo=https://github.com/sumanthreddygayam/shl_project)
+
+After deployment, the public service exposes:
+
+```text
+GET  https://<service>.onrender.com/health
+POST https://<service>.onrender.com/chat
+GET  https://<service>.onrender.com/docs
 ```
 
 For a fresh environment, run the catalog and embedding build commands before
