@@ -178,7 +178,14 @@ _CHAT_UI = """
       add("user", clean); input.value = ""; send.disabled = true; send.textContent = "Thinking";
       try {
         const res = await fetch("/chat", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({messages})});
-        const data = await res.json(); if (!res.ok) throw new Error(data.detail || `HTTP ${res.status}`);
+        const raw = await res.text();
+        let data = null;
+        try { data = JSON.parse(raw); } catch (_) { /* handled below with HTTP context */ }
+        if (!res.ok) {
+          const detail = data?.detail || raw.replace(/<[^>]*>/g, " ").replace(/\\s+/g, " ").trim().slice(0, 180);
+          throw new Error(`HTTP ${res.status}${detail ? `: ${detail}` : ""}`);
+        }
+        if (!data) throw new Error(`HTTP ${res.status}: server returned HTML instead of JSON`);
         messages.push({role: "assistant", content: data.reply});
         add("assistant", data.reply, data.recommendations || []);
       } catch (err) {

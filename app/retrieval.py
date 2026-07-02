@@ -59,7 +59,12 @@ class HybridAssessmentRetriever:
     async def retrieve(self, query: RetrievalQuery) -> list[RetrievalCandidate]:
         assessments = self.catalog.load()
         by_id = {assessment.id: assessment for assessment in assessments}
-        semantic = self._semantic_hits(query, by_id, limit=max(60, query.limit))
+        semantic = (
+            self._semantic_hits(query, by_id, limit=max(60, query.limit))
+            if os.getenv("SEMANTIC_RETRIEVAL_ENABLED", "true").lower()
+            not in {"0", "false", "no", "off"}
+            else []
+        )
         lexical = self._lexical_hits(query, assessments, limit=max(60, query.limit))
 
         merged: dict[str, RetrievalCandidate] = {}

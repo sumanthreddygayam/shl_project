@@ -6,3 +6,6 @@ services:
     branch: main
     dockerfilePath: ./Dockerfile
     healthCheckPath: /health
+    envVars:
+      - key: SEMANTIC_RETRIEVAL_ENABLED
+        value: "false"
