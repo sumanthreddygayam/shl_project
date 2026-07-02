@@ -12,8 +12,6 @@ only catalogued SHL Individual Test Solutions.
 
 `/health` and `/chat` were verified live with HTTP 200 responses.
 
-Submission document: [Approach (two pages maximum)](APPROACH.md)
-
 ## What is implemented
 
 - SHL catalog ingestion and normalization (`scraper/catalog.json`)
