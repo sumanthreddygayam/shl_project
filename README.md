@@ -3,6 +3,15 @@
 Production-oriented, stateless RAG + LangGraph FastAPI service for recommending
 only catalogued SHL Individual Test Solutions.
 
+## Public API submission links
+
+- **Public API:** [https://shl-recommender-api-3nb0.onrender.com](https://shl-recommender-api-3nb0.onrender.com)
+- **Health:** [GET /health](https://shl-recommender-api-3nb0.onrender.com/health)
+- **Chat:** [POST /chat](https://shl-recommender-api-3nb0.onrender.com/chat)
+- **Interactive API docs:** [Swagger UI](https://shl-recommender-api-3nb0.onrender.com/docs)
+
+`/health` and `/chat` were verified live with HTTP 200 responses.
+
 ## What is implemented
 
 - SHL catalog ingestion and normalization (`scraper/catalog.json`)
@@ -186,9 +195,9 @@ readiness check.
 After deployment, the public service exposes:
 
 ```text
-GET  https://<service>.onrender.com/health
-POST https://<service>.onrender.com/chat
-GET  https://<service>.onrender.com/docs
+GET  https://shl-recommender-api-3nb0.onrender.com/health
+POST https://shl-recommender-api-3nb0.onrender.com/chat
+GET  https://shl-recommender-api-3nb0.onrender.com/docs
 ```
 
 For a fresh environment, run the catalog and embedding build commands before
