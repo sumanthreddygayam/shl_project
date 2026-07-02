@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local environments and secrets
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# Local-only project material not needed for public deployment
+ARCHITECTURE.md
+sample_conversations/
+.agents/
+.codex/
+
+# Logs and runtime artifacts
+*.log
+uvicorn.out.log
+uvicorn.err.log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Keep generated catalog/vectorstore deployable, but ignore temporary rebuilds
+*.tmp
